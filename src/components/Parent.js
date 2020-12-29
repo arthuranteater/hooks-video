@@ -29,7 +29,7 @@ export default class Parent extends Component {
     return (
       <>
         <button onClick={this.handleClick}>
-          Update Parent State and Props To Be Passed
+          {status ? "Hide Joke" : "Show Joke"} (Prop passed to Child)
         </button>
         <button onClick={this.handleHooksClick}>
           {hooks ? "Hide Hooks Child" : "Show Hooks Child"}

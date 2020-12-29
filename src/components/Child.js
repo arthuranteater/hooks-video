@@ -2,12 +2,26 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
+const getJoke = () => {
+  fetch("https://icanhazdadjoke.com/", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((res) => this.setJoke(res.joke));
+};
+
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show: this.props.status,
       str: this.handleProp(this.props.arr),
+      joke: "",
     };
   }
 
@@ -15,13 +29,31 @@ export default class App extends Component {
 
   handleProp = (prop) => {
     console.log("constructor (set initial state)");
-    return prop.join(",");
+    return prop.join("");
   };
   clickHandler = () => {
     this.setState((prevState) => ({ ...prevState, show: !this.state.show }));
   };
+  setJoke = (joke) => {
+    this.setState((prevState) => ({ ...prevState, joke: joke }));
+  };
+
+  getJoke = () => {
+    fetch("https://icanhazdadjoke.com/", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => this.setJoke(res.joke));
+  };
+
   componentDidMount() {
     console.log("componentDidMount (make api calls)");
+    this.getJoke();
   }
   componentDidUpdate(prevProps, prevState) {
     console.log("componentDidUpdate (check for updated props)");
@@ -38,30 +70,16 @@ export default class App extends Component {
   }
   render() {
     console.log("render (render new view)");
+    const { show, str, joke } = this.state;
     return (
       <div className="App">
         <header className="App-header">
-          <h1>Learn React Hooks!</h1>
-          <button onClick={this.clickHandler}>Update state</button>
-          {this.state.show ? <div>Show = True</div> : <></>}
+          <h1>Learn React Hooks Plus Get A Dad Joke!</h1>
+          <p>{str}</p>
+          {show ? <p>{joke}</p> : <></>}
+          <button onClick={this.getJoke}>Get New Joke</button>
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <h2>
-            How to convert class components to functional components with
-            Hooks!!
-          </h2>
-
-          <h3>Common Life Cycle Methods</h3>
+          <h2>Common Life Cycle Methods</h2>
           <h3>1) Mounting: ComponentDidMount</h3>
           <ul>constructor</ul>
           <h3>2) Updating: ComponentDidUpdate</h3>

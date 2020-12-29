@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { getJSON } from "./CustomHook";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -7,9 +8,12 @@ const computeProp = (props) => {
 };
 
 export default function App(props) {
+  //api
+  const api = "https://icanhazdadjoke.com/";
+  //renders
   console.log("rendering hooks child");
   //constructor ?
-  const [hello, setHello] = useState(() => {
+  const [str, setStr] = useState(() => {
     console.log("useState, setting initial state");
     return computeProp(props.arr);
   });
@@ -17,11 +21,12 @@ export default function App(props) {
   //setting intial state without computing
   const [joke, setJoke] = useState("");
   const [show, setShow] = useState(props.status);
+  const [newJoke, setNewJoke] = useState(true);
 
   //componentDidMount
   useEffect(() => {
     console.log("useEffect (mounted)");
-    fetch("https://icanhazdadjoke.com/", {
+    fetch(api, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -31,7 +36,11 @@ export default function App(props) {
         return res.json();
       })
       .then((res) => setJoke(res.joke));
-  }, []);
+  }, [newJoke]);
+
+  //custom hook
+
+  // const joke = getJSON(api, "joke", newJoke);
 
   //componentDidUpdate
   useEffect(() => {
@@ -46,47 +55,24 @@ export default function App(props) {
     };
   }, []);
 
-  //componentDidMount, componentDidUpdate, componentWillUnmount
-
   return (
     <div className="App">
       <header className="App-header">
-        <p>{hello}</p>
-        <p>{joke}</p>
-        <h1>Learn React Hooks!</h1>
+        <h1>Learn React Hooks Plus Get Dad Joke!</h1>
+        <p>{str}</p>
+        {show ? <p>{joke}</p> : <></>}
         <button
           onClick={(e) => {
-            // e.preventDefault()
-            e.stopPropagation();
-            setShow(!show);
+            setNewJoke(!newJoke);
           }}
         >
-          Update state
+          Get Joke
         </button>
-        {show ? <div>Show = True</div> : <></>}
-        {/* <div>{`renders${renders.current}`}</div> */}
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <h2>
-          How to convert class components to functional components with Hooks!!
-        </h2>
-
-        <h3>Common Life Cycle Methods</h3>
-        <h3>1) Mounting: ComponentDidMount</h3>
-        <ul>constructor</ul>
-        <h3>2) Updating: ComponentDidUpdate</h3>
-        <ul>setState</ul>
-        <h3>3) Unmounting: ComponentWillUnmount</h3>
+        <h2>Common Hooks!!</h2>
+        <h3>1) useState</h3>
+        <h3>2) useEffect</h3>
+        <h3>3) custom hooks</h3>
       </header>
     </div>
   );

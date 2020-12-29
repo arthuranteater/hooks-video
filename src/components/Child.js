@@ -5,32 +5,39 @@ import "./App.css";
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { show: this.props.status };
+    this.state = {
+      show: this.props.status,
+      str: this.handleProp(this.props.arr),
+    };
   }
+
+  // state = { show: this.props.status, str: this.handleProp(this.props.arr) };
+
+  handleProp = (prop) => {
+    console.log("constructor (set initial state)");
+    return prop.join(",");
+  };
   clickHandler = () => {
-    this.setState({ show: !this.state.show });
+    this.setState((prevState) => ({ ...prevState, show: !this.state.show }));
   };
   componentDidMount() {
-    console.log("component mounted");
+    console.log("componentDidMount (make api calls)");
   }
   componentDidUpdate(prevProps, prevState) {
-    console.log("prevProps", prevProps);
+    console.log("componentDidUpdate (check for updated props)");
     if (prevProps.status !== this.props.status) {
-      console.log("prevProps", prevProps, "currentProps", this.props.status);
-      console.log("props updated");
+      console.log("status prop updated", this.props.status);
+      this.setState((prevState) => ({ ...prevState, show: this.props.status }));
     }
     if (prevState.show !== this.state.show) {
-      console.log("prevProps", prevProps, "currentProps", this.props.status);
-      // console.log("component updated");
-      // console.log("prevProps", prevProps);
+      console.log("show state updated", this.state.show);
     }
   }
   componentWillUnmount() {
-    console.log("component unmounted");
+    console.log("**CHILD** componentWillUnmount (turn off eventListeners etc)");
   }
   render() {
-    console.log("rendered");
-    console.log("this.state", this.state);
+    console.log("render (render new view)");
     return (
       <div className="App">
         <header className="App-header">

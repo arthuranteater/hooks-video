@@ -40,7 +40,7 @@ export default function App(props) {
 
   //custom hook
 
-  // const joke = getJSON(api, "joke", newJoke);
+  const data = getJSON(api, "id", newJoke);
 
   //componentDidUpdate
   useEffect(() => {
@@ -58,9 +58,9 @@ export default function App(props) {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Learn React Hooks Plus Get Dad Joke!</h1>
+        <h1>Learn React Hooks Plus Get A Dad Joke!</h1>
         <p>{str}</p>
-        {show ? <p>{joke}</p> : <></>}
+        {show ? <p>{data}</p> : <></>}
         <button
           onClick={(e) => {
             setNewJoke(!newJoke);
